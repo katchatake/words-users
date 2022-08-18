@@ -27,7 +27,7 @@
                                     </td>
                                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         <button type="button"
-                                            class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
+                                            class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" v-on:click="toggleModal(index)">
                                             Comentarios
                                         </button>
                                         <button type="button"
@@ -43,6 +43,68 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div v-if="showModal"
+        class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+        <div class="relative w-auto my-6 mx-auto max-w-6xl">
+            <!--content-->
+            <div
+                class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                <!--header-->
+                <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                    <h3 class="text-3xl font-semibold">
+                        Comentarios
+                    </h3>
+                    <button
+                        class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                        v-on:click="toggleModal()">
+                        <span
+                            class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                        </span>
+                    </button>
+                </div>
+                <!--body-->
+                <div class="relative p-6 flex-auto">
+                    <h3> Frase : " {{ fraseModal }} "</h3>
+                    <br>
+                    <div class="flex justify-center">
+                        <ul class="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
+                            <li class="px-6 py-2 border-b border-gray-200 w-full rounded-t-lg"
+                                v-for="(comment, index) in comments" :key="index">{{ comment.comentario }}</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+                        <form>
+                            
+                            <div class="form-group mb-6">
+                                <label for="exampleInputPassword1"
+                                    class="form-label inline-block mb-2 text-gray-700">Agregar Comentario</label>
+                                <textarea class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlTextarea1" rows="3" placeholder="tu comentario"></textarea>
+                            </div>
+                            <button type="submit" class="px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Agregar</button>
+                        </form>
+                    </div>
+
+                </div>
+                <!--footer-->
+                <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                    <button
+                        class="text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button" v-on:click="toggleModal()">
+                        Cerrar
+                    </button>
+                    <!-- <button
+                        class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button" v-on:click="toggleModal()">
+                        Save Changes
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
 </template>
 
 <script>
@@ -51,7 +113,8 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            frases: []
+            frases: [],
+            showModal: false,
         };
     },
     computed: function () { },
@@ -59,6 +122,16 @@ export default {
         this.init();
     },
     methods: {
+        toggleModal: function (index) {
+            this.showModal = !this.showModal;
+            if (this.showModal == false) {
+                this.fraseModal = ''
+                this.comments = []
+            }else{
+                this.fraseModal = this.frases[index].texto
+                this.comments = this.frases[index].comments
+            }
+        },
         async init() {
             try {
                 let res = await axios.get(
