@@ -200,7 +200,7 @@ export default {
         async addComment() {
             let errors = [];
             if (this.comment.length <= 5) {
-                errors.push("debe tener mas de 5 letras");
+                errors.push("Tu comentario debe tener mas de 5 letras");
             }
             console.log(errors.length)
             if (errors.length == 0) {
@@ -225,13 +225,14 @@ export default {
                     // console.log(errors.length)
 
                     // console.log(res)
+                    this.comment='';
                     this.showModal = false;
                     this.init()
                 } catch (error) {
                     console.log(error)
                 }
             } else {
-
+                alert(errors)
             }
         },
         toggleModal: function (index) {

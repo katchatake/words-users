@@ -11,21 +11,21 @@
                         <form>
                             <div
                                 class="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                                <p class="text-center font-semibold mx-4 mb-0">Register</p>
+                                <p class="text-center font-semibold mx-4 mb-0">Registro</p>
                             </div>
 
                             <!-- Name input -->
                             <div class="mb-6">
                                 <input type="text"
                                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    v-model="user.name" id="exampleFormControlInput2" placeholder="Full name" />
+                                    v-model="user.name" id="exampleFormControlInput2" placeholder="Nombre completo" />
                             </div>
 
                             <!-- Email input -->
                             <div class="mb-6">
                                 <input type="text"
                                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    v-model="user.email" id="exampleFormControlInput2" placeholder="Email address" />
+                                    v-model="user.email" id="exampleFormControlInput2" placeholder="Correo Eléctronico" />
                             </div>
 
                             <!-- Type input -->
@@ -34,7 +34,7 @@
                                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                     v-model="user.email" id="exampleFormControlInput2" placeholder="Type User" /> -->
                                 <select class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example" v-model="user.type">
-                                    <option value="0">Type User</option>
+                                    <option value="0">Tipo de Usuario</option>
                                     <option value="1">Admin</option>
                                     <option value="2">Inivtado</option>
                                 </select>
@@ -44,13 +44,13 @@
                             <div class="mb-6">
                                 <input type="password"
                                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    v-model="user.password" id="exampleFormControlInput2" placeholder="Password" />
+                                    v-model="user.password" id="exampleFormControlInput2" placeholder="Contraseña" />
                             </div>
                             <!-- Password input -->
                             <div class="mb-6">
                                 <input type="password"
                                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    v-model="user.c_password" id="exampleFormControlInput2" placeholder="Password Again" />
+                                    v-model="user.c_password" id="exampleFormControlInput2" placeholder="Contraseña otra vez" />
                             </div>
 
                             <div class="text-center lg:text-center">
@@ -60,7 +60,6 @@
                                     Registrar
                                 </button>
                             </div>
-                            {{ user }}
                         </form>
                     </div>
                 </div>
@@ -88,8 +87,12 @@ export default {
         async validate() {
             let errors = [];
 
+            if (this.user.name.length <= 4) {
+                errors.push("Error, agrega tú nombre completo");
+            }
+
             if (!this.validEmail(this.user.email)) {
-                errors.push("Error, email incorrecto");
+                errors.push("Error, correo eléctronico incorrecto");
             }
 
             if (this.user.type == 0) {
@@ -111,7 +114,8 @@ export default {
                     // console.log(res.data);
                 } catch (error) { }
             }else{
-                console.log(errors)
+                // console.log(errors)
+                alert(errors)
             }
         },
         validEmail(email) {

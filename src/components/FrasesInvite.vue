@@ -43,8 +43,8 @@
                                             v-on:click="toggleModal(index)">
                                             Comentarios
                                         </button>
-                                        <button type="button"
-                                            class="inline-block px-6 ml-3 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out">
+                                        <button v-if="frase.status != 3 && frase.status != 0" type="button"
+                                            class="inline-block px-6 ml-3 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" @click="delStatus(frase.id)">
                                             Quitar
                                         </button>
                                     </td>
@@ -209,7 +209,7 @@ export default {
         async addFrase(){
             let errors = [];
             if (this.frase.length <= 3) {
-                errors.push("debe tener mas de 3 letras");
+                errors.push("La frase debe tener mas de 3 letras");
             }
             console.log(errors.length)
             if (errors.length == 0) {
@@ -233,19 +233,20 @@ export default {
                     // console.log(errors.length)
 
                     // console.log(res)
+                    this.frase='';
                     this.addModal = false;
                     this.init()
                 } catch (error) {
                     console.log(error)
                 }
             } else {
-
+                alert(errors);
             }
         },
         async addComment() {
             let errors = [];
             if (this.comment.length <= 5) {
-                errors.push("debe tener mas de 5 letras");
+                errors.push("Tu comentario debe tener mas de 5 letras");
             }
             console.log(errors.length)
             if (errors.length == 0) {
@@ -270,13 +271,14 @@ export default {
                     // console.log(errors.length)
 
                     // console.log(res)
+                    this.comment='';
                     this.showModal = false;
                     this.init()
                 } catch (error) {
                     console.log(error)
                 }
             } else {
-
+                alert(errors)
             }
         },
         toggleModal: function (index) {
@@ -340,6 +342,27 @@ export default {
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 );
         },
+        async delStatus(id){
+            try {
+                const userStore = useUserStore()
+                let res = await axios.post(
+                    "delete-frase", {
+                    id_frase: id,
+                    id_user: userStore.userData.id
+                },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${userStore.token}`
+                        }
+                    }
+                );
+                // console.log(res)
+                alert(res.data[0])
+                this.init()
+            } catch (error) {
+
+            }
+        }
     },
     mounted() {
         // console.log(`The initial count is ${this.count}.`);

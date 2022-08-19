@@ -29,7 +29,7 @@
                   class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   v-model="user.email"
                   id="exampleFormControlInput2"
-                  placeholder="Email address"
+                  placeholder="Correo Eléctronico"
                 />
               </div>
 
@@ -40,7 +40,7 @@
                   class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   v-model="user.password"
                   id="exampleFormControlInput2"
-                  placeholder="Password"
+                  placeholder="Contraseña"
                 />
               </div>
 
@@ -50,18 +50,18 @@
                   class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                   @click="validate()"
                 >
-                  Login
+                  Entrar
                 </button>
               </div>
               <p class="text-sm font-semibold mt-2 pt-1 mb-0">
-                Don't have an account?
-                <a
+                No tienes cuenta. 
+                <router-link to="/register">Registrate</router-link>
+                <!-- <a
                   href="#!"
                   class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
                   >Register</a
-                >
+                > -->
               </p>
-              {{ user }}
             </form>
           </div>
         </div>
@@ -102,6 +102,8 @@ export default {
         let res = await userStore.loginUser(this.user)
         // console.log(res)
         } catch (error) {}
+      }else{
+        alert(errors)
       }
     },
     validEmail(email) {
