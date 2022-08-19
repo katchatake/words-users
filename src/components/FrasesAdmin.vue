@@ -3,13 +3,16 @@
         <div class="flex items-center justify-center">
             <div class="inline-flex" role="group">
                 <button type="button"
-                    class=" rounded-l px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out ">
+                    class=" rounded-l px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out "
+                @click="archiAll()">
                     Activados </button>
                 <button type="button"
-                    class="rounded-r px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">Rechazados
+                    class="rounded-r px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                @click="rejecAll()">Rechazados
                 </button>
                 <button type="button"
-                    class="rounded-r px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">Todos</button>
+                    class="rounded-r px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                @click="datAll()">Todos</button>
             </div>
         </div>
         <div class="flex items-center mt-4 justify-center">
@@ -18,11 +21,13 @@
                     class=" rounded-l px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out ">
                     Estatus </button> -->
                 <button type="button"
-                    class="rounded-l px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">Más
+                    class="rounded-l px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                    @click="descDate()">Más
                     recientes
                 </button>
                 <button type="button"
-                    class="rounded-r px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">Más
+                    class="rounded-r px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                    @click="ascDate()">Más
                     antiguos</button>
             </div>
         </div>
@@ -164,6 +169,7 @@ export default {
     data() {
         return {
             frases: [],
+            frasesTemp:[],
             showModal: false,
             fraseModal: '',
             comments: [],
@@ -176,6 +182,21 @@ export default {
         this.init();
     },
     methods: {
+        async descDate (){
+            this.frases = this.frasesTemp.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        },
+        async ascDate (){
+            this.frases = this.frasesTemp.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+        },
+        async archiAll(){
+            this.frases = this.frasesTemp.filter(item => item.status == 1)
+        },
+        async rejecAll(){
+            this.frases = this.frasesTemp.filter(item => item.status == 2)
+        },
+        async datAll(){
+            this.frases = this.frasesTemp;
+        },
         async addComment() {
             let errors = [];
             if (this.comment.length <= 5) {
@@ -263,6 +284,7 @@ export default {
                 );
                 // console.log(res.data);
                 this.frases = this.formatList(res.data.data)
+                this.frasesTemp = this.frases
             } catch (error) {
 
             }
