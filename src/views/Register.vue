@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {useUserStore} from '../stores/user'
 export default {
     data() {
         return {
@@ -106,11 +106,9 @@ export default {
 
             if (errors.length == 0) {
                 try {
-                    let res = await axios.post(
-                        "register",
-                        this.user
-                    );
-                    console.log(res.data);
+                    const userStore = useUserStore()
+                    let res = await userStore.registerUser(this.user)
+                    // console.log(res.data);
                 } catch (error) { }
             }else{
                 console.log(errors)
@@ -125,7 +123,7 @@ export default {
         },
     },
     mounted() {
-        console.log(`The initial count is ${this.count}.`);
+        // console.log(`The initial count is ${this.count}.`);
     },
 };
 </script>

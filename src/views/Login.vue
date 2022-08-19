@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {useUserStore} from '../stores/user'
 export default {
   data() {
     return {
@@ -92,11 +92,15 @@ export default {
 
       if (errors.length == 0) {
         try {
-          let res = await axios.post(
-            "login",
-            this.user
-          );
-          console.log(res.data);
+        //   let res = await axios.post(
+        //     "login",
+        //     this.user
+        //   );
+        //   console.log(res.data);
+        const userStore = useUserStore()
+        // console.log(this.user)
+        let res = await userStore.loginUser(this.user)
+        // console.log(res)
         } catch (error) {}
       }
     },
